@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<robot name="ff6dof" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include materials -->
+  <material name="Red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="Blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="Gray">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <!-- Constants -->
+  <property name="M_PI" value="3.14159"/>
+  <!-- Lengths for the left arm -->
+  <property name="larm1_len" value="0.20" />
+  <property name="larm2_len" value="0.20" />
+  <property name="larm3_len" value="0.05" />
+  <property name="larm_width" value="0.025" />
+  <property name="larm_ball_width" value="0.03" />
+  <!-- Lengths for the left leg -->
+  <property name="lleg1_len" value="0.20" />
+  <property name="lleg2_len" value="0.20" />
+  <property name="lleg3_len" value="0.05" />
+  <property name="lleg_width" value="0.025" />
+  <property name="lleg_ball_width" value="0.03" />
+  <!-- Lengths for the torso -->
+  <property name="torso_xlen" value="0.05"/>
+  <property name="torso_ylen" value="0.2"/>
+  <property name="torso_zlen" value="0.2"/>
+
+  <!-- ============================================================ -->
+  <!--        TORAX LINK: where the arms/legs are placed            -->
+  <!-- ============================================================ -->
+
+  <link name="base_link" />
+  <joint name="base_link_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="torso"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <link name="torso">
+    <visual>
+      <origin xyz=" 0 0 0"  rpy="0 0 0"/>
+      <geometry>
+        <box size="${torso_xlen} ${torso_ylen} ${torso_zlen}"/>
+      </geometry>
+      <material name="Blue" />
+    </visual>
+  </link>
+
+  <!-- ============================================================ -->
+  <!--        LEFT ARM LINKS                                        -->
+  <!-- ============================================================ -->
+
+  <joint name="larm_j1" type="revolute">
+    <parent link="torso"/>
+    <child link="larm1"/>
+    <origin xyz="0 ${torso_ylen/2} ${torso_zlen/2}" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-1" upper="2.75"/>
+  </joint>
+
+  <link name="larm1" >
+    <visual>
+      <origin xyz="0 ${larm1_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${larm_width}" length="${larm1_len}"/>
+      </geometry>
+      <material name="Red" />
+    </visual>
+  </link>
+
+  <joint name="larm_j2" type="revolute">
+    <parent link="larm1"/>
+    <child link="larm2"/>
+    <origin xyz="0 ${larm1_len} 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.5" upper="2.5"/>
+  </joint>
+
+  <link name="larm2" >
+    <visual>
+      <origin xyz="0 ${larm2_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${larm_width}" length="${larm2_len}"/>
+      </geometry>
+      <material name="Blue" />
+    </visual>
+  </link>
+
+  <joint name="larm_j3" type="revolute">
+    <parent link="larm2"/>
+    <child link="larm3"/>
+    <origin xyz="0 ${larm2_len} 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.5" upper="2.5"/>
+  </joint>
+
+  <link name="larm3" >
+    <visual>
+      <origin xyz="0 ${larm3_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${larm_width}" length="${larm3_len}"/>
+      </geometry>
+      <material name="Green" />
+    </visual>
+  </link>
+
+  <!-- Balls located at joint positions (only for visual purposes) -->
+  <joint name="larm1_ball_joint" type="fixed">
+    <parent link="larm1"/>
+    <child link="larm1_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="larm1_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${larm_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+  <joint name="larm2_ball_joint" type="fixed">
+    <parent link="larm2"/>
+    <child link="larm2_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="larm2_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${larm_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+  <joint name="larm3_ball_joint" type="fixed">
+    <parent link="larm3"/>
+    <child link="larm3_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="larm3_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${larm_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+  <!-- ============================================================ -->
+  <!--        LEFT LEG LINKS                                        -->
+  <!-- ============================================================ -->
+
+  <joint name="lleg_j1" type="revolute">
+    <parent link="torso"/>
+    <child link="lleg1"/>
+    <origin xyz="0 ${torso_ylen/2} -${torso_zlen/2}" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.75" upper="1"/>
+  </joint>
+
+  <link name="lleg1" >
+    <visual>
+      <origin xyz="0 ${lleg1_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${lleg_width}" length="${lleg1_len}"/>
+      </geometry>
+      <material name="Red" />
+    </visual>
+  </link>
+
+  <joint name="lleg_j2" type="revolute">
+    <parent link="lleg1"/>
+    <child link="lleg2"/>
+    <origin xyz="0 ${lleg1_len} 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.5" upper="2.5"/>
+  </joint>
+
+  <link name="lleg2" >
+    <visual>
+      <origin xyz="0 ${lleg2_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${lleg_width}" length="${lleg2_len}"/>
+      </geometry>
+      <material name="Blue" />
+    </visual>
+  </link>
+
+  <joint name="lleg_j3" type="revolute">
+    <parent link="lleg2"/>
+    <child link="lleg3"/>
+    <origin xyz="0 ${lleg2_len} 0" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.5" upper="2.5"/>
+  </joint>
+
+  <link name="lleg3" >
+    <visual>
+      <origin xyz="0 ${lleg3_len/2} 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <cylinder radius="${lleg_width}" length="${lleg3_len}"/>
+      </geometry>
+      <material name="Green" />
+    </visual>
+  </link>
+
+  <!-- Balls located at joint positions (only for visual purposes) -->
+  <joint name="lleg1_ball_joint" type="fixed">
+    <parent link="lleg1"/>
+    <child link="lleg1_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="lleg1_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${lleg_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+  <joint name="lleg2_ball_joint" type="fixed">
+    <parent link="lleg2"/>
+    <child link="lleg2_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="lleg2_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${lleg_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+  <joint name="lleg3_ball_joint" type="fixed">
+    <parent link="lleg3"/>
+    <child link="lleg3_ball"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <link name="lleg3_ball">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${lleg_ball_width}"/>
+      </geometry>
+      <material name="Gray" />
+    </visual>
+  </link>
+
+
+</robot>
