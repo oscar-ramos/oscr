@@ -1,0 +1,14 @@
+namespace oscr{
+
+  /** \page cpp_examples cpp_examples
+       - \subpage cpp_parsing
+       - \subpage cpp_kine_control
+  */
+
+  /** \page py_examples py_examples
+       - \subpage py_parsing
+       - \subpage py_kine_control
+  */
+
+
+}

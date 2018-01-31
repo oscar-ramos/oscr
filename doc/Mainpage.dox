@@ -1,0 +1,32 @@
+namespace oscr{
+
+/** \mainpage Overview
+
+  This is the documentation of OSCR, the Operational Space Control for
+  redundant Robots library. This library contains code for the motion
+  generation of redundant robots. The robot model is loaded from URDF files.
+
+  The code currently has dependencies on RBDL, Pinocchio, QPOASES and
+  Eigen3. The prior installation of oscr-deps is highly recommended but the
+  dependencies can also be directly installed from their original sources.
+
+  The library is fully developed in C++ and there is inherent C++ interface
+  support. For ease of use, the other main interface is Python. The Python
+  bindings are automatically obtained using swig.
+
+  \section Example Examples
+
+  For the C++ interface the following examples are provided:
+
+  \li \ref cpp_parsing "Parsing a URDF model"
+  \li \ref cpp_kine_control "Kinematic control of a robot"
+
+  For the Python interface the following examples are provided:
+
+  \li \ref py_parsing "Parsing a URDF model"
+  \li \ref py_kine_control "Kinematic control of a robot"
+
+
+*/
+
+}

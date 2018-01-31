@@ -1,0 +1,103 @@
+
+//namespace oscr{
+
+/** \page cpp_parsing Parsing a URDF model in C++
+
+  Here is an example that shows how to load and parse a URDF model called
+  mymodel.urdf.
+
+  It must be specified whether the model has a floating base or not. The
+  following example uses pinocchio as backend.
+
+\code
+// parsing-test1.cpp
+#include <oscr/model/robot-model-pin.hpp>
+
+int main(int argc, char *argv[])
+{
+  bool fbase = true;
+  std::string modelname = "mymodel.urdf";
+  oscr::RobotModel *robot = new oscr::RobotModelPin(modelname, fbase);
+  // Work with the robot model here
+  return 0;
+}
+\endcode
+
+The same example using RBDL as backend is the following.
+\code
+// parsing-test2.cpp
+#include <oscr/model/robot-model-rbdl.hpp>
+
+int main(int argc, char *argv[])
+{
+  bool fbase = true;
+  std::string modelname = "mymodel.urdf";
+  oscr::RobotModel *robot = new oscr::RobotModelRbdl(modelname, fbase);
+  // Work with the robot model here
+  return 0;
+}
+\endcode
+
+The recommended way to compile these files is using cmake. It is assumed that
+oscr has been installed following the instructions provided in README.md or
+INSTALL.md and that pkgconfig is available in the system. The following is the
+required CMakeLists.txt
+
+\code
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+FIND_PACKAGE(PkgConfig)
+PKG_CHECK_MODULES(OSCR oscr REQUIRED)
+INCLUDE_DIRECTORIES(${OSCR_INCLUDE_DIRS})
+LINK_DIRECTORIES(${OSCR_LIBRARY_DIRS})
+
+ADD_EXECUTABLE(parsingTest1 parsing-test1.cpp)
+TARGET_LINK_LIBRARIES(parsingTest1 ${OSCR_LIBRARIES})
+
+\endcode
+
+Then, you can compile using cmake. Note that even if the installation is
+successful, the program will fail if you do not have a urdf called
+"mymodel.urdf". It is recommended to change that modelname with the path to an
+existing urdf file.
+
+The distinction between pinocchio and RBDL is only visible when parsing the
+model. However, both previous examples will produce the same result. After
+loading the model, all the information is parsed and can be accessed using
+oscr::RobotModel methods. For example, if some information about the model is
+needed to be printed on the screen, the following snippet can be added after
+loading the model.
+
+\code
+  unsigned int ndof, ndof_actuated;
+  bool has_floating_base;
+  std::string floating_link;
+  Eigen::VectorXd qmin, qmax, dqmax;
+  std::vector<std::string> jnames;
+  std::map<std::string, unsigned int> maplink_name_ID;
+
+  ndof  = robot->ndof(); // Total number of dofs
+  ndof_actuated = robot->ndofActuated(); // Number of actuated dofs
+  has_floating_base = robot->hasFloatingBase();
+  floating_link = robot->floatingLink(); // Floating link
+  maplink_name_ID = robot->mapLinkNamesIDs(); // Link names and IDs
+  // Joint angular and velocity limits
+  qmin  = robot->jointMinAngularLimits();
+  qmax  = robot->jointMaxAngularLimits();
+  dqmax = robot->jointVelocityLimits();
+  jnames = robot->jointNames();  // Joint names
+
+  // Show the previous information on the screen
+  std::cout << "Total ndof: " << ndof << std::endl;
+  std::cout << "Total ndof actuated: " << ndof_actuated << std::endl;
+  std::cout << "Has floating base: " << has_floating_base << std::endl;
+  std::cout << "Floating link: " << floating_link << std::endl;
+  oscr::printJointLimits(jnames, qmin, qmax, dqmax);
+  oscr::printLinkID(maplink_name_ID);
+
+\endcode
+
+*/
+
+//}
