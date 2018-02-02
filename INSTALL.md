@@ -65,10 +65,6 @@ Building and Installation of the C++ core
 Installation of Python Bindings
 ===============================
 
-+ The SWIG package is needed. Install it as (on Debian-based distributions):
-
-        sudo apt-get install swig
-
 + Add the installed python files to PYTHONPATH (in .bashrc so it is accessible
   to every terminal)
 
@@ -81,6 +77,7 @@ Installation of Python Bindings
 
 + To test that Python has been properly set execute:
 
+        source ~/.bashrc
         cd ~/dev/control/src/oscr
         cd unitTests/python
         python testMathUtils.py
