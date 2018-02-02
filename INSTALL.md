@@ -95,6 +95,7 @@ Documentation
 
 + Generate the documentation
 
+        cd ~/dev/control/src/oscr/build
         make doc
 
 + View the documentation (e.g. using Firefox)
