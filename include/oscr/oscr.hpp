@@ -19,17 +19,17 @@
 #ifndef _OSCR_HPP_
 #define _OSCR_HPP_
 
-#include <model/robot-model.hpp>
-#include <model/robot-model-pin.hpp>
-#include <model/robot-model-rbdl.hpp>
+#include <oscr/model/robot-model.hpp>
+#include <oscr/model/robot-model-pin.hpp>
+#include <oscr/model/robot-model-rbdl.hpp>
 
-#include <tools/math-utils.hpp>
-#include <tools/model-utils.hpp>
+#include <oscr/tools/math-utils.hpp>
+#include <oscr/tools/model-utils.hpp>
 
-#include <ik/kine-task-com.hpp>
-#include <ik/kine-task.hpp>
-#include <ik/kine-task-pose.hpp>
-#include <ik/kine-task-posture.hpp>
-#include <ik/osik-solvers.hpp>
+#include <oscr/ik/kine-task-com.hpp>
+#include <oscr/ik/kine-task.hpp>
+#include <oscr/ik/kine-task-pose.hpp>
+#include <oscr/ik/kine-task-posture.hpp>
+#include <oscr/ik/osik-solvers.hpp>
 
 #endif
