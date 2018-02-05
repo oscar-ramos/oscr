@@ -15,11 +15,10 @@ enough.
 Building and Installation of the C++ core
 =========================================
 
-Before installing OSCR, it is recommended to install the
-[oscr-deps](https://github.com/oscar-ramos/oscr-deps) package which contains
-the required dependencies (refer to this package for installation
-instructions). These dependencies can also be installed manually one by one,
-but care should be taken for compatibility.
+Before installing OSCR, it is recommended to install the [oscr-deps](https://github.com/oscar-ramos/oscr-deps) package
+which contains the required dependencies (refer to this package for
+installation instructions). These dependencies can also be installed manually
+one by one, but care should be taken for compatibility.
 
 To compile the library OSCR in a separate directory use:
 
