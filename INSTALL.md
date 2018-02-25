@@ -68,12 +68,12 @@ Installation of Python Bindings
 + Add the installed python files to PYTHONPATH (in .bashrc so it is accessible
   to every terminal)
 
-        echo "export PYTHONPATH=~/dev/control/install/lib/python2.7/site-packages:$PYTHONPATH" >> ~/.bashrc
+        echo 'export PYTHONPATH=~/dev/control/install/lib/python2.7/site-packages:$PYTHONPATH' >> ~/.bashrc
 
 + Make the library loscr available in the system (using the *LD_LIBRARY_PATH*
   environmental variable)
 
-        echo "export LD_LIBRARY_PATH=~/dev/control/install/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
+        echo 'export LD_LIBRARY_PATH=~/dev/control/install/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 
 + To test that Python has been properly set execute:
 
