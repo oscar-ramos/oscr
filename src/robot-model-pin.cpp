@@ -133,7 +133,7 @@ unsigned int oscr::RobotModelPin::ndofActuated()
   const
 {
   if (has_floating_base_)
-    // Elimiate the Cartesian position and orientation (quaternion)
+    // Eliminate the Cartesian position and orientation (quaternion)
     return pmodel_->nq-7;
   else
     return pmodel_->nq;
@@ -332,9 +332,9 @@ oscr::RobotModelPin::linearJacobian(const unsigned int& link_number,
   const
 {
   se3::Data::Matrix6x J(6, pmodel_->nv); J.fill(0);
-  // This Jacobian is in the local frame. It has to be transformed to the
-  // world frame (using the joint rotation matrix).
-  se3::getJacobian<true>(*pmodel_, *data_, link_number, J);
+  // This Jacobian is in the LOCAL frame. It has to be transformed to the
+  // WORLD frame (using the joint rotation matrix).
+  se3::getJacobian<se3::LOCAL>(*pmodel_, *data_, link_number, J);
   // Note: For some reason, the Jacobian in the supposedly fixed frame is
   // different from the one in rbdl. Check why???
 
@@ -380,7 +380,7 @@ Eigen::MatrixXd oscr::RobotModelPin::angularJacobian(const unsigned int& link_nu
     Eigen::Vector4d q;
 
     // Jacobian in global frame
-    se3::getJacobian<false>(*pmodel_, *data_, link_number, J);
+    se3::getJacobian<se3::LOCAL>(*pmodel_, *data_, link_number, J);
 
     // The structure of J is: [0 | Rot_ff_wrt_world | Jq_wrt_world]
     Jang.rightCols(ndofActuated()) = J.block(3,6,3,ndofActuated());
@@ -394,7 +394,7 @@ Eigen::MatrixXd oscr::RobotModelPin::angularJacobian(const unsigned int& link_nu
   else
   {
     // Jacobian in local frame
-    se3::getJacobian<true>(*pmodel_, *data_, link_number, J);
+    se3::getJacobian<se3::LOCAL>(*pmodel_, *data_, link_number, J);
     // Transform Jacobian from local frame to base frame
     return (data_->oMi[link_number].rotation())*J.bottomRows(3);
   }
@@ -408,7 +408,7 @@ Eigen::MatrixXd oscr::RobotModelPin::geometricJacobian(const unsigned int& link_
 {
   se3::Data::Matrix6x J(6,pmodel_->nv); J.fill(0);
   // Jacobian in local (link) frame
-  se3::getJacobian<true>(*pmodel_, *data_, link_number, J);
+  se3::getJacobian<se3::LOCAL>(*pmodel_, *data_, link_number, J);
 
   if (has_floating_base_)
   {
