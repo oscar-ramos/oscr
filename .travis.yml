@@ -44,10 +44,10 @@ script:
   - make install
   # Run the tests, ensuring the path is set correctly.
   - cd examples/c++
-  - ./ff6dofModel
+  # - ./ff6dofModel
   # Configure for Python support
   - echo 'export PYTHONPATH=~/install/lib/python2.7/site-packages:$PYTHONPATH' >> ~/.bashrc
-  - echo 'export LD_LIBRARY_PATH=~/dev/control/install/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+  - echo 'export LD_LIBRARY_PATH=~/install/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
   - source ~/.bashrc
   - cd ~/build/oscar-ramos/oscr/unitTests/python
   - python testMathUtils.py
