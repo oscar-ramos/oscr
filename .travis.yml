@@ -14,6 +14,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libeigen3-dev libboost-all-dev swig
   - sudo apt-get install liburdfdom-dev liburdfdom-headers-dev
+  - sudo apt-get install python-numpy
   
 # Create a catkin workspace with the package under integration.
 install:
