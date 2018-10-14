@@ -74,7 +74,8 @@ bool oscr::RobotModelPin::loadURDF(const std::string& model_name,
   unsigned int offset = 0;
   if (jnames_[0].compare("universe")==0)
   {
-    std::cout << "Eliminating first universe joint" << std::endl;
+    if (false)
+      std::cout << "Eliminating first universe joint" << std::endl;
     jnames_.erase(jnames_.begin());
     offset = 1;
   }
@@ -118,6 +119,7 @@ bool oscr::RobotModelPin::loadURDF(const std::string& model_name,
     }
   }
 
+  std::cout << "Model loaded: " << model_name << std::endl;
   return true;
 }
 

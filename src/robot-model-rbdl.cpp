@@ -73,7 +73,7 @@ bool RobotModelRbdl::loadURDF(const std::string& model_name,
   }
   else
   {
-    std::cout << "Loaded: " << model_name << std::endl;
+    std::cout << "Model loaded: " << model_name << std::endl;
   }
 
   /*
