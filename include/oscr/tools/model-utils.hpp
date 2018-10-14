@@ -51,6 +51,14 @@ void printJointLimits(const std::vector<std::string>& jnames,
 void printLinkID(const std::map< std::string, unsigned int >& nid);
 
 /**
+ * Print link names and their IDs within a line (short version)
+ *
+ * @param[in] nid map of link names and IDs obtained with
+ *                RobotModel::mapLinkNamesIDs()
+ */
+void printLinkIDshort(const std::map< std::string, unsigned int >& nid);
+
+/**
  * Print information about the parsed robot model
  *
  * @param[in] robot parsed robot model

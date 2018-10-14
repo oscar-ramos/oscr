@@ -50,6 +50,17 @@ void oscr::printLinkID(const std::map< std::string, unsigned int >& nid)
 }
 
 
+void oscr::printLinkIDshort(const std::map< std::string, unsigned int >& nid)
+{
+  std::cout << "\nMap link names: IDs" << std::endl;
+  std::map<std::string, unsigned int>::const_iterator it;
+  for (it=nid.begin(); it!=nid.end(); ++it)
+    std::cout << "(" << it->first << ": " << it->second << "), ";
+  std::cout << "\b\b";
+  std::cout << " " << std::endl;
+}
+
+
 void oscr::printModelInfo(oscr::RobotModel* robot)
 {
   Eigen::VectorXd qmin, qmax, dqmax;
