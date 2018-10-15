@@ -42,4 +42,7 @@ FILE(COPY ${URDF_MODELS} DESTINATION ${CMAKE_BINARY_DIR}/examples/models)
 ADD_EXECUTABLE(ff6dofModel ff6dof-model.cpp)
 TARGET_LINK_LIBRARIES(ff6dofModel ${OSCR_LIBRARIES})
 
+ADD_EXECUTABLE(ff6dofKineControl ff6dof-kine-control.cpp)
+TARGET_LINK_LIBRARIES(ff6dofKineControl ${OSCR_LIBRARIES})
+
 
