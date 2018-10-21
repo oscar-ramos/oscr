@@ -2,55 +2,82 @@
 # Test the parsing of the model of a simple revolute robot with a free floating
 # base and 6 dof (2 chains of 3 dof each)
 #
-# To use it: ipython -i ff6dof_model.py
+# To use it interactively: ipython -i ff6dof_model.py
+#
+# To use rbdl: ipython -i ff6dof_model.py --back rbdl
 #
 
-
-from oscr.robot_base import RobotBase
+from optparse import OptionParser
 import numpy as np
 
+from oscr.oscr import RobotModelPin, RobotModelRbdl
+from oscr.utils import dictLink, printJointLimits, printLinkNameIDShort
 
 if __name__ == '__main__':
 
-    # Whether floating base is used or not
+    parser = OptionParser()
+    parser.add_option("--back", dest="backend", default="pin",
+                      help="Backend to be used: pin (default) or rbdl")
+    (options, args) = parser.parse_args()
+    backend = options.backend
+    
+    # Use a floating base?
     fbase = True
-    # Frequency
-    f = 50.0
-    # Robot instance (choose between 'pin', 'rbdl' or 'ff6dof')
-    robot = RobotBase('../models/ff6dof.urdf', fbase, 'pin')
-    # Print robot model information
-    robot.printModelInfo()
+    # Robot model
+    modelname = "../models/ff6dof.urdf"
+    # Initialization
+    if (backend=="pin"):
+        print '-- Using Pinocchio as backend'
+        robot = RobotModelPin(modelname, fbase)
+    elif (backend=="rbdl"):
+        print '-- Using RBDL as backend'
+        robot = RobotModelRbdl(modelname, fbase)
+    else:
+        print '\nOnly pin and rbdl are accepted as backends ...',\
+              "ending the program.\n"
+        exit(0)
 
-    # Joint configuration
-    q = (0.75, -0.75, 1.57, -0.75, 0.75, -1.57)
-    q = np.array([q]).transpose()
-    if (fbase):
-        # Add floating base configuration
-        qb = np.array([[0., 0., 0., 1., 0., 0., 0.]]).transpose()
-        q = np.vstack([qb, q])
-        # Change base position
-        q[0][0] = 0.2
-        q[1][0] = 0.5
-        q[2][0] = 0.4
-        # Change base orientation
-        t = np.pi/3
-        q[3][0] = np.cos(t);
-        q[4][0] = np.sin(t)
-        #q[4][0] = np.sin(t)/np.sqrt(2.); q[5][0] = np.sin(t)/np.sqrt(2.)
+    # Number of Degrees of Freedom
+    ndof  = robot.ndof()
+    # Number of Actuated Degrees of Freedom
+    ndof_actuated = robot.ndofActuated()
+    # Floating link
+    has_floating_base = robot.hasFloatingBase()
+    floating_link = robot.floatingLink()
+    # Joint angular and velocity limits
+    qmin  = robot.jointMinAngularLimits()
+    qmax  = robot.jointMaxAngularLimits()
+    dqmax = robot.jointVelocityLimits()
+    # Jont names
+    jnames = robot.jointNames()
+    # Link names and IDs
+    linkID = dictLink(robot.mapLinkNamesIDs())
+    
+    print 'Total ndof: ', ndof
+    print 'Total ndof actuated: ', ndof_actuated
+    print 'Has floating base: ', has_floating_base
+    print 'FloatingLink: ', floating_link, '\n'
+    printJointLimits(jnames, qmin, qmax, dqmax)
+    printLinkNameIDShort(linkID)
+
+    # Joint configuration with all values to zero.
+    q = np.zeros(ndof)
+    # If there is a floating base, then set a valid null quaternion
+    if (has_floating_base):
+        q[3]=1.0
+    # Set the current joint configuration
     robot.updateJointConfig(q)
+  
+    # Get the current joint configuration
+    qcurrent = robot.getJointConfig()
 
-    # Print positions
-    position1 = robot.model.linkPosition(robot.mlink['larm3'])
-    position2 = robot.model.linkPosition(robot.mlink['lleg3'])
-    print "Link larm3 position: ", position1.transpose()
-    print "Link lleg3 position: ", position2.transpose()
-
-    # Example of joint motion (however, no visualization)
-    for k in range(200):
-        q[robot.mjoint['larm_j1']] += 0.005
-        q[robot.mjoint['larm_j2']] += 0.010
-        q[robot.mjoint['larm_j3']] -= 0.015
-        q[robot.mjoint['lleg_j1']] -= 0.005
-        q[robot.mjoint['lleg_j2']] -= 0.010
-        q[robot.mjoint['lleg_j3']] += 0.015
-        robot.updateJointConfig(q)
+    # Get the pose of larm3 and lleg3 and the Jacobian of larm3
+    poselarm = robot.linkPose(linkID["larm3"])
+    poselleg = robot.linkPose(linkID["lleg3"])
+    Jlarm = robot.geometricJacobian(linkID["larm3"])
+    
+    print "Current joint config: ", qcurrent.T
+    print "Pose of larm3: ", poselarm.T
+    print "Pose of lleg3: ", poselleg.T
+    print "Geometric Jacobian of larm3:\n ", Jlarm
+   

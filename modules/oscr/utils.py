@@ -34,6 +34,21 @@ def printLinkNameID(mapLinkNameID):
         print 'Link:', linkNames[i], ' - ID:', linkIDs[i]
 
 
+def printLinkNameIDShort(mapLinkNameID):
+    """
+    Print link names and link IDs in short format (one line)
+
+    """
+    linkNames = mapLinkNameID.keys()
+    linkIDs = mapLinkNameID.values()
+    print '\nMap link_names: IDs'
+    for i in xrange(len(linkNames)):
+        customstr = '('+linkNames[i]+': '+str(linkIDs[i])+')'
+        sys.stdout.write(customstr)
+        if (i<len(linkNames)-1):
+            sys.stdout.write(', ')
+    print '\n'
+
 def dictLink(mapLinkNameID):
     """
     Convert from C++ map to Python dictionary
