@@ -36,7 +36,7 @@ oscr::OSIKSolver::OSIKSolver(RobotModel* model,
 
 oscr::OSIKSolver::~OSIKSolver()
 {
-  delete rmodel_;
+  //delete rmodel_;
 }
 
 

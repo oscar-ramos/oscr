@@ -42,7 +42,7 @@ KineTask::KineTask(RobotModel* model,
 
 KineTask::~KineTask()
 {
-  delete rmodel_;
+  //delete rmodel_;
 }
 
 
