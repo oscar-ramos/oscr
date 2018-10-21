@@ -8,10 +8,10 @@
 
 #include <oscr/model/robot-model-pin.hpp>
 #include <oscr/model/robot-model-rbdl.hpp>
-#include <oscr/tools/model-utils.hpp>
-
 #include <oscr/ik/kine-task-pose.hpp>
 #include <oscr/ik/osik-solvers.hpp>
+#include <oscr/tools/vector-logger.hpp>
+
 
 int main(int argc, char *argv[])
 {
@@ -73,7 +73,9 @@ int main(int argc, char *argv[])
   // Desired value for the leg (move it)
   Eigen::VectorXd xleg;
   taskleg->getSensedValue(xleg);
-  xleg(1) = xleg(1) + 0.05;
+  xleg(0) = xleg(0) + 0.1;
+  xleg(1) = xleg(1) + 0.1;
+  xleg(2) = xleg(2) + 0.1;
   taskleg->setDesiredValue(xleg);
 
   // Solver
@@ -89,13 +91,31 @@ int main(int argc, char *argv[])
   taskleg->getDerivError(error);
   error = taskleg->getError();
 
+  // Logs
+  oscr::VectorLogger arm_log("/tmp/arm.txt");
+  oscr::VectorLogger leg_log("/tmp/leg.txt");
+  oscr::VectorLogger legerror_log("/tmp/legerror.txt");
+  oscr::VectorLogger q_log("/tmp/q.txt");
+  
   unsigned int i=0;
+  double time = 0.0;
   while (error.norm()>0.0005)
   {
     solver.getPositionControl(q, qdes);
     robot->updateJointConfig(q);
     q = qdes;
     error = taskleg->getError();
+
+    // Logs
+    time = i*dt;
+    legerror_log.save(error, time);
+    q_log.save(q, time);
+    taskarm->getSensedValue(xarm);
+    taskleg->getSensedValue(xleg);
+    arm_log.save(xarm, time);
+    leg_log.save(xleg, time);
+
+    // Print on screen
     if (++i%50==0)
       std::cout << i << " - error norm: " << error.norm() << std::endl;
   }

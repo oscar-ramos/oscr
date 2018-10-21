@@ -43,6 +43,7 @@ ADD_LIBRARY(oscr SHARED
   robot-model-pin.cpp
   robot-model-ff6dof.cpp
   model-utils.cpp
+  vector-logger.cpp
   kine-task.cpp
   kine-task-pose.cpp
   kine-task-com.cpp
