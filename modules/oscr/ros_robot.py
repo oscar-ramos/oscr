@@ -38,7 +38,6 @@ class RosRobot(RobotBase):
         # Robot model
         robot_description = str(packages.get_pkg_dir(package))
         full_model_name = robot_description + robot_model
-        print 'Robot model:', full_model_name
         # Initialize RobotBase
         RobotBase.__init__(self, full_model_name, fbase, backend)
         if (type_robot == 'rviz'):

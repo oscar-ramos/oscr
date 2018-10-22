@@ -60,8 +60,8 @@ class RobotBase(object):
         Print generic information about the robot model
 
         """
-        print '\nTotal ndof: ', self.ndof
-        print 'Total ndof actuated: ', self.ndofActuated
+        print '\nTotal ndof:', self.ndof, '(actuated:', \
+              self.ndofActuated, ")"
         print 'Has floating base: ', self.hasFloatingBase
         print 'floatingLink: ', self.floatingLink
         printJointLimits(self.jointNames, self.qmin, self.qmax, self.dqmax)
