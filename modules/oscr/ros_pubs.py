@@ -66,7 +66,7 @@ class JointCommandPub(object):
         # TODO
         pass
 
-    def publish(self, q):
+    def publish(self, q, q_extra=False):
         # TODO
         pass
 
