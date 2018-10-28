@@ -48,14 +48,14 @@ class RosKineSim(object):
             self.update = self._updateModel
 
 
-    def initKineSolver(self, q=None, solverType='HQP'):
+    def initKineSolver(self, q=[], solverType='HQP'):
         """
         Initialize a kinematic solver.
           q - joint value to initialize the solver
           solverType - 'NS', 'WQP' or 'HQP'
 
         """
-        if (q == None):
+        if (q == []):
             q = self.robot.getJointConfig()
         if (solverType=='NS'):
             self.solver = OSIKSolverNS(self.robot.model, q, 1.0/self.freq)
@@ -129,7 +129,7 @@ class RosKineSim(object):
                 self.task[i].path_pub.publish(current)
 
 
-    def doTask(self, taskName, desiredValue, maxError=0.005):
+    def doTask(self, taskName, desiredValue, maxError=0.005, log=[]):
         """
         Do a certain task until the error is smaller than maxError. It calls
         its own rate.sleep internally (do not use an external sleep)
@@ -143,8 +143,15 @@ class RosKineSim(object):
         self.task[taskName].setDesiredValue(desiredValue)
         # Get the robot configuration
         q = self.robot.getJointConfig()
+        # Save log?
+        if (log==[]):
+            savelog = False
+        else:
+            savelog = True
         # The following 2 lines are only to recompute the error
         while (np.linalg.norm(self.task[taskName].getError()) > maxError):
+            if (savelog):
+                log.save(q)
             self.solver.getPositionControl(q, self.qcommand)
             self.update(self.qcommand)
             q = self.qcommand.copy()
