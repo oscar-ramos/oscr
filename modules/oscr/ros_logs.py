@@ -26,6 +26,9 @@ class RosLogs(object):
         self.taskdim = []
         self.ftask = []
         self.ftaskdes = []
+        # Log poses
+        self.flinkpose = []
+        self.linkname = []
         if (do_log):
             # Joint configurations are always logged
             self.fjoints = open(self.path+"q.txt", "w")
@@ -37,6 +40,7 @@ class RosLogs(object):
             # Do nothing if no log is needed
             self.save = self._save_dummy
             self.savetime = self._savetime_dummy
+
 
     def addTask(self, task, name=None):
         """
@@ -59,6 +63,33 @@ class RosLogs(object):
         self.task.append(task)
         self.taskdim.append(tdim)
 
+
+    def addPoses(self, linknames, simrobot, lognames=[]):
+        """
+        Add poses to log their current value
+          linkname - list of link names ['l1', 'l2'], or a single string
+          simrobot - sim.robot object
+          lognames - list of file names (if not set, the link names are used)
+
+        """
+        self.robot = simrobot
+        if (lognames==[]):
+            pnames = linknames
+        else:
+            pnames = lognames
+        if (self.do_log):
+            # Only open the files if log is needed
+            if linknames.__class__ == str:
+                fpose = open(self.path + pnames + ".txt", "w")
+                self.flinkpose.append(fpose)
+                self.linkname.append(linknames)
+            else:
+                for i in range(len(linknames)):
+                    fpose = open(self.path + pnames[i] + ".txt", "w")
+                    self.flinkpose.append(fpose)
+                    self.linkname.append(linknames[i])
+        
+
     def _save(self, q):
         """
         Save the logs for the joints and the tasks. Do not use this method
@@ -69,8 +100,12 @@ class RosLogs(object):
         """
         # Save the joint configuration
         self.fjoints.write(str(self.time) + ' ')
-        for i in xrange(q.shape[0]):
-            self.fjoints.write(str(q[i,0])+' ')
+        if (len(q.shape)==1):
+            for i in xrange(q.shape[0]):
+                self.fjoints.write(str(q[i])+' ')
+        else:
+            for i in xrange(q.shape[0]):
+                self.fjoints.write(str(q[i,0])+' ')
         self.fjoints.write('\n')
         # Save task values (sensed and desired)
         for k in xrange(len(self.task)):
@@ -83,6 +118,13 @@ class RosLogs(object):
                 self.ftaskdes[k].write(str(xdes[i,0])+' ')
             self.ftask[k].write('\n')
             self.ftaskdes[k].write('\n')
+        # Save the poses, if needed
+        for k in xrange(len(self.linkname)):
+            x = self.robot.linkPose(self.linkname[k])
+            self.flinkpose[k].write(str(self.time) + ' ')
+            for i in xrange(7):
+                self.flinkpose[k].write(str(x[i,0])+' ')
+            self.flinkpose[k].write('\n')
         # Update the time
         self.time += self.dt
 
@@ -143,3 +185,5 @@ class RosLogs(object):
 
         """
         print ' t:', self.time
+        
+
