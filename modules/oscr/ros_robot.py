@@ -36,8 +36,8 @@ class RosRobot(RobotBase):
         # ROS rate: it must be called in the main loop
         self.rate = rospy.Rate(freq)
         # Robot model
-        robot_description = str(packages.get_pkg_dir(package))
-        full_model_name = robot_description + robot_model
+        self.pkg = str(packages.get_pkg_dir(package))
+        full_model_name = self.pkg + robot_model
         # Initialize RobotBase
         RobotBase.__init__(self, full_model_name, fbase, backend)
         if (type_robot == 'rviz'):
@@ -56,6 +56,9 @@ class RosRobot(RobotBase):
         self.frameMarker = []
         self.ballMarkerLink  = []
         self.frameMarkerLink = []
+        # For extra joints
+        self.qextras = []
+
 
     def update(self, q, q_extra=False):
         """
@@ -67,7 +70,10 @@ class RosRobot(RobotBase):
 
         """
         self.updateJointConfig(q)
-        self.publishJoints(self.getJointConfig(), q_extra)
+        if (self.qextras == []):
+            self.publishJoints(self.getJointConfig(), q_extra)
+        else:
+            self.publishJoints(self.getJointConfig(), self.qextras)
 
     def updateWithMarkers(self, q, q_extra=False):
         """
@@ -80,7 +86,10 @@ class RosRobot(RobotBase):
 
         """
         self.updateJointConfig(q)
-        self.publishJoints(self.getJointConfig(), q_extra)
+        if (self.qextras == []):
+            self.publishJoints(self.getJointConfig(), q_extra)
+        else:
+            self.publishJoints(self.getJointConfig(), self.qextras)
         # Publish ball markers, if any
         for i in xrange(len(self.ballMarker)):
             self.ballMarker[i].setPose(
