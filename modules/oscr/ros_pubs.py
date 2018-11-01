@@ -104,7 +104,8 @@ class PathPub(object):
         self.kpose.pose.position.y = pose[1,0]
         self.kpose.pose.position.z = pose[2,0]
         # New orientation
-        if (len(pose)>3):
+        if (len(pose)>4): # 4 to avoid problems with only orientation
+            # TO-DO: handle orientation only in a better way
             self.kpose.pose.orientation.x = pose[4,0]
             self.kpose.pose.orientation.y = pose[5,0]
             self.kpose.pose.orientation.z = pose[6,0]
