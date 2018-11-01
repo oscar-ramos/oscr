@@ -74,7 +74,7 @@ class RosKineSim(object):
 
 
     def initKineTaskPose(self, linkName, taskType, taskName=None, gain=1.0,
-                         show_path = None):
+                         show_path = None, show_markers=[]):
         """
         Wrapper to initialize (declare) a kinematic position/orientation task.
         Note that this does not add the task to the solver.
@@ -86,8 +86,12 @@ class RosKineSim(object):
 
         """
         linkID = self.robot.mlink[linkName]
-        task = RosKineTaskPose(self.robot.model, linkID, taskType, taskName,
-                               self.show_markers, show_path)
+        if (show_markers==[] or show_markers==True):
+            task = RosKineTaskPose(self.robot.model, linkID, taskType,
+                                   taskName, self.show_markers, show_path)
+        elif (show_markers==False):
+            task = RosKineTaskPose(self.robot.model, linkID, taskType,
+                                   taskName, False, show_path)
         task.ctask.setGain(gain)
         # Set name for the task dictionary
         if (taskName==None):

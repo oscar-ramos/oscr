@@ -58,6 +58,7 @@ class RosKineTaskPose(object):
                 self.show_path = True
 
         else:
+            self.marker = [FakeMarker(), FakeMarker()]
             self.setDesiredValue = self.ctask.setDesiredValue
             self.keep = self.ctask.keep
 
@@ -104,3 +105,14 @@ class RosKineTaskPose(object):
         desiredValue = self.ctask.getDesiredValue()
         self.marker[1].setPose(desiredValue)
 
+
+
+class FakeMarker(object):
+    def __init__(self):
+        pass
+
+    def setPose(self, pose):
+        pass
+
+    def publish(self):
+        pass
