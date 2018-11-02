@@ -105,6 +105,11 @@ class RosKineTaskPose(object):
         desiredValue = self.ctask.getDesiredValue()
         self.marker[1].setPose(desiredValue)
 
+    def setMask(self, mask):
+        self.ctask.setMask(mask)
+        # Redefine some members for ease of use
+        self.sensedValue = np.zeros((self.ctask.getTaskDim(), 1))
+        self.derror = np.zeros((self.ctask.getTaskDim(), 1))
 
 
 class FakeMarker(object):

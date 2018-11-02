@@ -177,3 +177,11 @@ class RosKineSim(object):
 
         """
         self.solver.pushTask(task.ctask)
+
+
+    def removeTask(self, task_name):
+        """
+        Proxy to remove a task from the solver
+
+        """
+        self.solver.removeTask(task_name)
