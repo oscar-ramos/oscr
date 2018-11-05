@@ -107,17 +107,23 @@ class RosLogs(object):
             for i in xrange(q.shape[0]):
                 self.fjoints.write(str(q[i,0])+' ')
         self.fjoints.write('\n')
-        # Save task values (sensed and desired)
+        # Save sensed task values
         for k in xrange(len(self.task)):
             x    = self.task[k].getSensedValue()
-            xdes = self.task[k].getDesiredValue()
             self.ftask[k].write(str(self.time) + ' ')
-            self.ftaskdes[k].write(str(self.time) + ' ')
-            for i in xrange(self.taskdim[k]):
+            for i in xrange(len(x)):
                 self.ftask[k].write(str(x[i,0])+' ')
-                self.ftaskdes[k].write(str(xdes[i,0])+' ')
             self.ftask[k].write('\n')
-            self.ftaskdes[k].write('\n')
+        # Save desired task values
+        for k in xrange(len(self.task)):
+            xdes = self.task[k].getDesiredValue()
+            if (len(xdes)==0):
+                pass
+            else:
+                self.ftaskdes[k].write(str(self.time) + ' ')
+                for i in xrange(len(xdes)):
+                    self.ftaskdes[k].write(str(xdes[i,0])+' ')
+                self.ftaskdes[k].write('\n')
         # Save the poses, if needed
         for k in xrange(len(self.linkname)):
             x = self.robot.linkPose(self.linkname[k])
